@@ -4,8 +4,8 @@ import { event } from "../hooks/hooksBaseSystem";
 import "reflect-metadata";
 import express, { NextFunction, Request, Response } from "express";
 import "../routes";
-import { mongoose } from "../mongoose/mongooseClient";
 import { HooksKey } from "../hooks/types";
+import { ServerBaseKeys } from "./types";
 
 interface bodyParserJsonOptions {
 	limit?: number;
@@ -33,8 +33,6 @@ interface ServerConfig {
 	encodingType?: encoding_types;
 	port: number;
 	serviceName: string;
-	mongodb?: boolean;
-	mongodbUri?: string;
 	bodyParserOptions?: bodyParserJsonOptions | bodyParserUrlencodedOptions | bodyParserRawOptions | bodyParserTextOptions;
 }
 
@@ -50,16 +48,21 @@ export function LaunchServer(config: ServerConfig) {
 			throw new Error('cannot create server with this class name  , THE SERVER CLASS NAME SHOULD BE "Server" ');
 		}
 
-		/// callBack function
-		const ServerStartCallback = target.prototype["OnReady"];
+		const getMiddlewares = Reflect.getMetadata(ServerBaseKeys.AppMiddleware, target);
 
-		if (target.prototype["UseMiddlwares"] && target.prototype["UseMiddlwares"]().length > 0) {
-			app.use(target.prototype["UseMiddlwares"]());
+		if (getMiddlewares() && getMiddlewares().length > 0) {
+			app.use(getMiddlewares());
 		}
 
 		const OnRequestHook = Reflect.getMetadata(HooksKey.OnRequestHook, target);
 
 		const OnResponseHook = Reflect.getMetadata(HooksKey.OnResponseHook, target);
+
+		const callback =
+			Reflect.getMetadata(ServerBaseKeys.ServerCallback, target) ||
+			function (__servicesName: string, __port: number) {
+				console.log(` >>>> ${__servicesName} server is running on port ${__port} `);
+			};
 
 		app.use(function (req: Request, res: Response, next: NextFunction) {
 			if (OnRequestHook && OnRequestHook.registerd) {
@@ -85,32 +88,11 @@ export function LaunchServer(config: ServerConfig) {
 
 		// connect to mongodb
 
-		if (config.mongodb) {
-			(async () => {
-				try {
-					await mongoose.connect(config.mongodbUri!, {
-						useNewUrlParser: true,
-						useFindAndModify: false,
-						useUnifiedTopology: true,
-					});
-					console.log(`>>>> service ${config.serviceName}  connected to mongodb`);
-				} catch (error) {
-					console.log("mongodb error :" + error);
-				}
-			})();
-		}
-
 		/// server port
 		const PORT = config.port !== undefined ? config.port : 3000;
 
-		// Callback function
-
-		const SERVER_CAllBACK_FUNCTION = !ServerStartCallback
-			? () => console.log(` >>>> ${config.serviceName} server is running on port ${PORT}`)
-			: ServerStartCallback;
-
 		/// start server
 
-		app.listen(PORT, SERVER_CAllBACK_FUNCTION);
+		app.listen(PORT, callback(config.serviceName, PORT));
 	};
 }

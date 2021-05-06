@@ -1,7 +1,7 @@
 {
 	"name": "@marketfy/asmaa",
 	"version": "1.0.0",
-	"description": "framework for building marketfy microservices",
+	"description": "asmaa is framework for building  microservices  api ",
 	"main": "index.js",
 	"scripts": {
 		"start:tsc": "tsc -w",
@@ -26,5 +26,9 @@
 		"@types/redis": "^2.8.28",
 		"concurrently": "^6.0.2",
 		"nodemon": "^2.0.7"
-	}
+	},
+	"repository": {
+		"directory": "https://github.com/marketfy/asmaa"
+	},
+	"homepage": "https://github.com/marketfy"
 }
