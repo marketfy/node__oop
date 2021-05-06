@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import "reflect-metadata";
-import { router } from "../basesystem/rootApplication";
-import { event } from "../hooks/hooksBaseSystem";
-import { HooksKey } from "../hooks/types";
+import { router } from "../basesystem";
+import { event } from "../hooks";
+import { HooksKey } from "../hooks";
 import { RoutesKeys, MethodKeys } from "./types";
 
 function validateBody(keys: string) {

@@ -1,6 +1,6 @@
 {
 	"name": "@marketfy/asmaa",
-	"version": "1.0.0",
+	"version": "1.0.7",
 	"description": "asmaa is framework for building  microservices  api ",
 	"main": "index.js",
 	"scripts": {

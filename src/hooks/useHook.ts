@@ -1,4 +1,3 @@
-import { event } from "./hooksBaseSystem";
 import { HooksKey } from "./types";
 import { v4 } from "uuid";
 import { Request, Response } from "express";

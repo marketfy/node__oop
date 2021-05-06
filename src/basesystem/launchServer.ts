@@ -48,7 +48,11 @@ export function LaunchServer(config: ServerConfig) {
 			throw new Error('cannot create server with this class name  , THE SERVER CLASS NAME SHOULD BE "Server" ');
 		}
 
-		const getMiddlewares = Reflect.getMetadata(ServerBaseKeys.AppMiddleware, target);
+		const getMiddlewares =
+			Reflect.getMetadata(ServerBaseKeys.AppMiddleware, target) ||
+			function () {
+				return [];
+			};
 
 		if (getMiddlewares() && getMiddlewares().length > 0) {
 			app.use(getMiddlewares());
