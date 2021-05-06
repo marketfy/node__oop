@@ -1,0 +1,30 @@
+{
+	"name": "@marketfy/asmaa",
+	"version": "1.0.0",
+	"description": "framework for building marketfy microservices",
+	"main": "index.js",
+	"scripts": {
+		"start:tsc": "tsc -w",
+		"start:server": "nodemon ./dist/server.js",
+		"start": "concurrently npm:start:*"
+	},
+	"author": "Md >>> marketfy",
+	"license": "ISC",
+	"dependencies": {
+		"@types/uuid": "^8.3.0",
+		"body-parser": "^1.19.0",
+		"express": "^4.17.1",
+		"mongoose": "^5.12.7",
+		"redis": "^3.1.2",
+		"reflect-metadata": "^0.1.13",
+		"uuid": "^8.3.2"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.11",
+		"@types/body-parser": "^1.19.0",
+		"@types/mongoose": "^5.10.5",
+		"@types/redis": "^2.8.28",
+		"concurrently": "^6.0.2",
+		"nodemon": "^2.0.7"
+	}
+}
